@@ -1,4 +1,5 @@
 ﻿using apiToDo.DTO;
+using apiToDo.Models;
 using apiToDo.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,17 +22,17 @@ namespace apiToDo.Controllers
         }
 
         [HttpGet("lstTarefas")]
-        public ActionResult<IEnumerable<TarefaDTO>> ListarTarefas()
+        public ActionResult<List<TarefaDTO>> ListarTarefas()
         {
             try
             {
-                var tarefas = _repo.ListarTarefas();
+                var tarefas = _repo.ListarTarefas(); // Atribui as tarefas já criadas
 
                 var dto = tarefas.Select(a => new TarefaDTO
                 {
                     ID_TAREFA = a.ID_TAREFA,
                     DS_TAREFA = a.DS_TAREFA
-                });
+                }); // Envia os dados para a saida
                 return Ok(dto);
             }
 
@@ -42,23 +43,38 @@ namespace apiToDo.Controllers
         }
 
         [HttpPost("InserirTarefas")]
-        public ActionResult InserirTarefas([FromBody] TarefaDTO Request)
+        public ActionResult<IEnumerable<TarefaDTO>> InserirTarefas([FromBody] TarefaDTO Request)
         {
+            if (string.IsNullOrWhiteSpace(Request.DS_TAREFA))
+                return BadRequest("A tarefa é obrigatória.");
+
+            var novaTarefa = new Tarefas { ID_TAREFA = Request.ID_TAREFA, DS_TAREFA = Request.DS_TAREFA }; 
             try
             {
-
-                return StatusCode(200);
-
+                _repo.AdicionarTarefa(novaTarefa); 
 
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);  // ID inválido
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);  // ID duplicado
+            }
 
-            catch (Exception ex)
+            catch (Exception ex) // Se ocorrer outra exceção 
             {
                 return StatusCode(400, new { msg = $"Ocorreu um erro em sua API {ex.Message}" });
             }
+
+            var listaAtualizada = _repo.ListarTarefas() 
+                .Select(a => new TarefaDTO { ID_TAREFA = a.ID_TAREFA, DS_TAREFA = a.DS_TAREFA }); // Envia os dados para a saida
+
+            return Ok(listaAtualizada);
         }
 
-        [HttpGet("DeletarTarefa")]
+        [HttpPost("DeletarTarefa")]
         public ActionResult DeleteTask([FromQuery] int ID_TAREFA)
         {
             try

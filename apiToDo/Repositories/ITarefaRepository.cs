@@ -3,8 +3,10 @@ using apiToDo.Models;
 
 namespace apiToDo.Repositories
 {
-    public interface ITarefaRepository
+    public interface ITarefaRepository // Contrato que define as funcionalidades de acesso a dados
     {
-        IEnumerable<Tarefas> ListarTarefas();
+        List<Tarefas> ListarTarefas();
+        void AdicionarTarefa(Tarefas nova_Tarefa);
+        void DeletarTarefa(int id);
     }
 }
