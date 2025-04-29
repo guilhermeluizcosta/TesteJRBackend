@@ -1,8 +1,11 @@
 ﻿using apiToDo.DTO;
-using apiToDo.Models;
+using apiToDo.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace apiToDo.Controllers
 {
@@ -10,14 +13,26 @@ namespace apiToDo.Controllers
     [Route("[controller]")]
     public class TarefasController : ControllerBase
     {
-        [Authorize]
-        [HttpPost("lstTarefas")]
-        public ActionResult lstTarefas()
+        private readonly ITarefaRepository _repo;
+
+        public TarefasController(ITarefaRepository repo)
+        {
+            _repo = repo;
+        }
+
+        [HttpGet("lstTarefas")]
+        public ActionResult<IEnumerable<TarefaDTO>> ListarTarefas()
         {
             try
             {
-              
-                return StatusCode(200);
+                var tarefas = _repo.ListarTarefas();
+
+                var dto = tarefas.Select(a => new TarefaDTO
+                {
+                    ID_TAREFA = a.ID_TAREFA,
+                    DS_TAREFA = a.DS_TAREFA
+                });
+                return Ok(dto);
             }
 
             catch (Exception ex)
