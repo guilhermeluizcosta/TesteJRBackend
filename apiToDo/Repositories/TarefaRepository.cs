@@ -28,27 +28,38 @@ namespace apiToDo.Repositories
                 }
                };
 
-            public List<Tarefas> ListarTarefas() // Lista com todas tarefas
+            public List<Tarefas> ListarTarefas() // Lista que retorna todas tarefas
             {
                 return _tarefas;
             }
             
             public void AdicionarTarefa(Tarefas nova_Tarefa)
             {
-            if (nova_Tarefa.ID_TAREFA <= 0) {
+            if (nova_Tarefa.ID_TAREFA <= 0) 
                 throw new ArgumentException("O ID deve ser maior que zero.");
-            }
+            
             if (_tarefas.Any(a => a.ID_TAREFA == nova_Tarefa.ID_TAREFA))
-            {
+            
                 throw new InvalidOperationException($"Já existe um aluno com o ID {nova_Tarefa.ID_TAREFA}.");
-            }
-                _tarefas.Add(nova_Tarefa);
+            
+                _tarefas.Add(nova_Tarefa); // Adiciona a tarefa ao "banco de dados"
             }
 
             public void DeletarTarefa(int id)
             {
+            if (id <= 0)
+                throw new ArgumentException("O ID deve ser maior que zero.");
+            
             var tarefa = _tarefas.FirstOrDefault(a =>  a.ID_TAREFA == id);
-             }
+
+            if (tarefa == null)
+                throw new KeyNotFoundException($"O usuario esta tentando deletar a tarefa de codigo {id}.");
+
+
+            _tarefas.Remove(tarefa); // Remove a tarefa ao "banco de dados"
+        }
+            
+           
            
           
 

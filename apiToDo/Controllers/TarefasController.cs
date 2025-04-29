@@ -20,7 +20,7 @@ namespace apiToDo.Controllers
         {
             _repo = repo;
         }
-
+        [Authorize]
         [HttpGet("lstTarefas")]
         public ActionResult<List<TarefaDTO>> ListarTarefas()
         {
@@ -28,11 +28,7 @@ namespace apiToDo.Controllers
             {
                 var tarefas = _repo.ListarTarefas(); // Atribui as tarefas já criadas
 
-                var dto = tarefas.Select(a => new TarefaDTO
-                {
-                    ID_TAREFA = a.ID_TAREFA,
-                    DS_TAREFA = a.DS_TAREFA
-                }); // Envia os dados para a saida
+                var dto = tarefas.Select(a => new TarefaDTO{ID_TAREFA = a.ID_TAREFA,DS_TAREFA = a.DS_TAREFA}); // Envia os dados para a saida
                 return Ok(dto);
             }
 
@@ -43,7 +39,7 @@ namespace apiToDo.Controllers
         }
 
         [HttpPost("InserirTarefas")]
-        public ActionResult<IEnumerable<TarefaDTO>> InserirTarefas([FromBody] TarefaDTO Request)
+        public ActionResult<List<TarefaDTO>> InserirTarefas([FromBody] TarefaDTO Request)
         {
             if (string.IsNullOrWhiteSpace(Request.DS_TAREFA))
                 return BadRequest("A tarefa é obrigatória.");
@@ -51,7 +47,7 @@ namespace apiToDo.Controllers
             var novaTarefa = new Tarefas { ID_TAREFA = Request.ID_TAREFA, DS_TAREFA = Request.DS_TAREFA }; 
             try
             {
-                _repo.AdicionarTarefa(novaTarefa); 
+                _repo.AdicionarTarefa(novaTarefa); // Envia a nova tarefa para ser adicionado ao "banco de dados"
 
             }
             catch (ArgumentException ex)
@@ -79,14 +75,26 @@ namespace apiToDo.Controllers
         {
             try
             {
-
-                return StatusCode(200);
+                _repo.DeletarTarefa(ID_TAREFA); // Remove tarefa do "bando de dados"
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // ID inválido
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Tarefa não encontrada
             }
 
             catch (Exception ex)
             {
                 return StatusCode(400, new { msg = $"Ocorreu um erro em sua API {ex.Message}" });
             }
+            var listaAtualizada = _repo.ListarTarefas()
+                  .Select(a => new TarefaDTO { ID_TAREFA = a.ID_TAREFA, DS_TAREFA = a.DS_TAREFA }); // Envia os dados para a saida
+
+            return Ok(listaAtualizada);
+
         }
     }
 }
