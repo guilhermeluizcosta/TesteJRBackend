@@ -70,6 +70,19 @@ namespace apiToDo.Repositories
 
             tarefaExistente.DS_TAREFA = tarefaAtualizada.DS_TAREFA; // Atualliza a Tarefa 
         }
+
+        public Tarefas BuscarTarefa(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("O ID deve ser maior que zero.");
+
+            var tarefa = _tarefas.FirstOrDefault(a => a.ID_TAREFA == id);
+
+            if (tarefa == null)
+                throw new KeyNotFoundException($"Tarefa com o ID {id} não foi encontrado");
+
+            return tarefa;
+        }
             
            
            

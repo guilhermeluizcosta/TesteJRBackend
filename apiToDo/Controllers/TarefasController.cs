@@ -49,6 +49,11 @@ namespace apiToDo.Controllers
             {
                 _repo.AdicionarTarefa(novaTarefa); // Envia a nova tarefa para ser adicionado ao "banco de dados"
 
+                var listaAtualizada = _repo.ListarTarefas()
+                 .Select(a => new TarefaDTO { ID_TAREFA = a.ID_TAREFA, DS_TAREFA = a.DS_TAREFA });
+
+                return Ok(listaAtualizada);
+
             }
             catch (ArgumentException ex)
             {
@@ -63,11 +68,6 @@ namespace apiToDo.Controllers
             {
                 return StatusCode(400, new { msg = $"Ocorreu um erro em sua API {ex.Message}" });
             }
-
-            var listaAtualizada = _repo.ListarTarefas() 
-                .Select(a => new TarefaDTO { ID_TAREFA = a.ID_TAREFA, DS_TAREFA = a.DS_TAREFA }); // Envia os dados para a saida
-
-            return Ok(listaAtualizada);
         }
 
         [HttpPost("DeletarTarefa")]
@@ -76,6 +76,11 @@ namespace apiToDo.Controllers
             try
             {
                 _repo.DeletarTarefa(ID_TAREFA); // Remove tarefa do "bando de dados"
+
+                var listaAtualizada = _repo.ListarTarefas()
+                 .Select(a => new TarefaDTO { ID_TAREFA = a.ID_TAREFA, DS_TAREFA = a.DS_TAREFA });
+
+                return Ok(listaAtualizada);
             }
             catch (ArgumentException ex)
             {
@@ -90,10 +95,7 @@ namespace apiToDo.Controllers
             {
                 return StatusCode(400, new { msg = $"Ocorreu um erro em sua API {ex.Message}" });
             }
-            var listaAtualizada = _repo.ListarTarefas()
-                  .Select(a => new TarefaDTO { ID_TAREFA = a.ID_TAREFA, DS_TAREFA = a.DS_TAREFA }); // Envia os dados para a saida
-
-            return Ok(listaAtualizada);
+            
 
         }
         [HttpPost("AtualizarTarefa")]
@@ -106,6 +108,11 @@ namespace apiToDo.Controllers
             {
                 var tarefaAtualizada = new Tarefas { ID_TAREFA = Request.ID_TAREFA, DS_TAREFA = Request.DS_TAREFA };
                 _repo.AtualizarTarefa(tarefaAtualizada);
+
+                var listaAtualizada = _repo.ListarTarefas()
+                 .Select(a => new TarefaDTO { ID_TAREFA = a.ID_TAREFA, DS_TAREFA = a.DS_TAREFA });
+
+                return Ok(listaAtualizada);
             }
 
             catch (ArgumentException ex)
@@ -121,11 +128,27 @@ namespace apiToDo.Controllers
             {
                 return StatusCode(400, new { msg = $"Ocorreu um erro em sua API {ex.Message}" });
             }
-
-            var listaAtualizada = _repo.ListarTarefas()
-                  .Select(a => new TarefaDTO { ID_TAREFA = a.ID_TAREFA, DS_TAREFA = a.DS_TAREFA }); // Envia os dados para a saida
-            
-            return Ok(listaAtualizada);
         }
+        [HttpGet("BuscarTarefa")]
+        public ActionResult BuscarTarefa([FromQuery] int id)
+        {
+            try
+            {
+                var tarefa = _repo.BuscarTarefa(id);
+
+                var tarefaDTO = new TarefaDTO {ID_TAREFA = tarefa.ID_TAREFA, DS_TAREFA = tarefa.DS_TAREFA};
+
+                return Ok(tarefaDTO);
+            }
+            catch (ArgumentException ex) {
+                return BadRequest(ex.Message);
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Tarefa não encontrada
+            }
+        }
+
+       
     }
 }
