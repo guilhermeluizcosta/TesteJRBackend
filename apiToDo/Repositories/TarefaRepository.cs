@@ -57,6 +57,18 @@ namespace apiToDo.Repositories
 
 
             _tarefas.Remove(tarefa); // Remove a tarefa ao "banco de dados"
+             }
+
+        public void AtualizarTarefa(Tarefas tarefaAtualizada) {
+            if (tarefaAtualizada.ID_TAREFA <= 0)
+                throw new ArgumentException("O ID deve ser maior que zero.");
+
+            var tarefaExistente = _tarefas.FirstOrDefault(a => a.ID_TAREFA == tarefaAtualizada.ID_TAREFA);
+
+            if (tarefaExistente == null)
+                throw new KeyNotFoundException($"Tarefa com o ID {tarefaAtualizada.ID_TAREFA} não foi encontrado");
+
+            tarefaExistente.DS_TAREFA = tarefaAtualizada.DS_TAREFA; // Atualliza a Tarefa 
         }
             
            

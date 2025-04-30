@@ -96,5 +96,36 @@ namespace apiToDo.Controllers
             return Ok(listaAtualizada);
 
         }
+        [HttpPost("AtualizarTarefa")]
+        public ActionResult<List<TarefaDTO>>AtualizarTarefa([FromBody] TarefaDTO Request)
+        {
+            if (string.IsNullOrWhiteSpace(Request.DS_TAREFA))
+                return BadRequest("A tarefa é obrigatória.");
+
+            try
+            {
+                var tarefaAtualizada = new Tarefas { ID_TAREFA = Request.ID_TAREFA, DS_TAREFA = Request.DS_TAREFA };
+                _repo.AtualizarTarefa(tarefaAtualizada);
+            }
+
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(400, new { msg = $"Ocorreu um erro em sua API {ex.Message}" });
+            }
+
+            var listaAtualizada = _repo.ListarTarefas()
+                  .Select(a => new TarefaDTO { ID_TAREFA = a.ID_TAREFA, DS_TAREFA = a.DS_TAREFA }); // Envia os dados para a saida
+            
+            return Ok(listaAtualizada);
+        }
     }
 }

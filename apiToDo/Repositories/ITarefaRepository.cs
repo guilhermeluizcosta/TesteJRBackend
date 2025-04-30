@@ -8,5 +8,6 @@ namespace apiToDo.Repositories
         List<Tarefas> ListarTarefas();
         void AdicionarTarefa(Tarefas nova_Tarefa);
         void DeletarTarefa(int id);
+        void AtualizarTarefa(Tarefas tarefaAtualizada);
     }
 }
