@@ -70,7 +70,7 @@ namespace apiToDo.Controllers
             }
         }
 
-        [HttpPost("DeletarTarefa")]
+        [HttpDelete("DeletarTarefa")]
         public ActionResult DeleteTask([FromQuery] int ID_TAREFA)
         {
             try
@@ -98,7 +98,7 @@ namespace apiToDo.Controllers
             
 
         }
-        [HttpPost("AtualizarTarefa")]
+        [HttpPut("AtualizarTarefa")]
         public ActionResult<List<TarefaDTO>>AtualizarTarefa([FromBody] TarefaDTO Request)
         {
             if (string.IsNullOrWhiteSpace(Request.DS_TAREFA))
@@ -155,7 +155,7 @@ namespace apiToDo.Controllers
             }
         }
         [Authorize]
-        [HttpGet("auth/lstTarefas")]
+        [HttpGet("auth/lstTarefas")] // Metodo para testar o Authorize 
         public ActionResult<List<TarefaDTO>> ListarTarefasAuth()
         {
             try
