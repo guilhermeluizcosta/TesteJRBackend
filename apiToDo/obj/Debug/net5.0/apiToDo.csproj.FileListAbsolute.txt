@@ -60,3 +60,11 @@ C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\obj\Debug\net5.0\refin
 C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\obj\Debug\net5.0\apiToDo.pdb
 C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\obj\Debug\net5.0\apiToDo.genruntimeconfig.cache
 C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\obj\Debug\net5.0\ref\apiToDo.dll
+C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\bin\Debug\net5.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\bin\Debug\net5.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\bin\Debug\net5.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Guilherme\Documents\Teste\TesteJRBackend\apiToDo\bin\Debug\net5.0\Swashbuckle.AspNetCore.Annotations.dll
